@@ -1,0 +1,28 @@
+---
+// One large photo over two small ones, as in the design's hero.
+import { Image } from 'astro:assets';
+import { images, type ImageKey } from '../data/images';
+interface Props { keys: ImageKey[]; eager?: boolean }
+const { keys, eager = true } = Astro.props;
+const [first, ...rest] = keys.map((k) => images[k]);
+---
+<div class="photos">
+  <Image src={first.src} alt={first.alt} widths={[400, 600, 800, 1100, 1400]} sizes="(min-width: 1200px) 680px, (min-width: 900px) 58vw, calc(100vw - 40px)" quality={70}
+    class="photo photo--lg" style={`object-position:${first.pos}`} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : 'auto'} />
+  {rest.length > 0 && (
+    <div class="photos__row">
+      {rest.map((img) => (
+        <Image src={img.src} alt={img.alt} widths={[200, 300, 420, 640]} sizes="(min-width: 1200px) 334px, (min-width: 900px) 29vw, calc(50vw - 26px)" quality={70}
+          class="photo photo--sm" style={`object-position:${img.pos}`} loading="lazy" />
+      ))}
+    </div>
+  )}
+</div>
+
+<style>
+  .photos { display: flex; flex-direction: column; gap: 12px; }
+  .photo--lg { height: 300px; }
+  .photo--sm { height: 150px; }
+  .photos__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 12px; }
+  @media (min-width: 900px) { .photo--lg { height: 340px; } .photo--sm { height: 170px; } }
+</style>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../config/site';
+import { isAmount } from '../lib/price';
+
+// Starting prices (keep in step with `price` in src/content/services/*.md). Check each claim is accurate before launch
+const packages = [
+  { name: 'Regular', price: '60', blurb: 'Ongoing upkeep.', items: ['Weekly or fortnightly', 'Kitchen, bathrooms, floors', 'Minimum two-hour visit'], cta: 'Book regular', service: 'domestic-cleaning' },
+  { name: 'Deep clean', price: '120', blurb: 'A one-off reset.', items: ['Detailed whole-home clean', 'Limescale and grease', 'Add oven, fridge or window cleaning'], cta: 'Book deep clean', service: 'deep-cleaning' },
+  { name: 'Move out', price: 'Speak to us', blurb: 'For end of tenancy.', items: ['Cupboards and appliances', 'Priced by property size', 'Free re-clean of any missed areas'], cta: 'Book move out', service: 'end-of-tenancy-cleaning' },
+];
+---
+<BaseLayout
+  title={`Cleaning Prices in ${site.town} | ${site.name}`}
+  description={`Starting prices for regular, deep and move-out cleans in ${site.town}.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Prices', path: '/prices/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Cleaning packages and prices</h1>
+      <p class="muted measure">Clear starting prices. We confirm the total before work begins.</p>
+      <div class="grid grid--cards">
+        {packages.map((p) => (
+          <article class="card pkg">
+            <h2 class="pkg__name">{p.name}</h2>
+            {isAmount(p.price)
+              ? <p><span class="muted">From</span> <strong class="display pkg__price">£{p.price}</strong></p>
+              : <p><strong class="display pkg__price">{p.price}</strong></p>}
+            <p class="muted">{p.blurb}</p>
+            <ul class="arrow-list pkg__list">{p.items.map((i) => <li>{i}</li>)}</ul>
+            <a href={`/book/?service=${p.service}`} class="btn btn--primary" data-track="book">{p.cta}</a>
+          </article>
+        ))}
+      </div>
+      <p class="muted measure">Office and carpet cleaning are priced on request. <a href="/free-quote/">Get a free quote</a>.</p>
+    </div>
+  </section>
+  <CTA alt />
+</BaseLayout>
+
+<style>
+  .pkg { gap: 12px; }
+  .pkg__name { font-size: 18px; }
+  .pkg__price { font-size: 28px; }
+  .pkg__list { flex: 1; }
+</style>

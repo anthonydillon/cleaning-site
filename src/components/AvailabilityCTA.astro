@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+interface Props { service?: string }
+const { service } = Astro.props;
+---
+<a href={service ? `/book/?service=${service}` : '/book/'} class="pill-cta" data-track="book">
+  Check availability
+  <span class="pill-cta__icon"><Icon name="calendar" /></span>
+</a>

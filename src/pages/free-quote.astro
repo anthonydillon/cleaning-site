@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { site } from '../config/site';
+---
+<BaseLayout
+  title={`Free Cleaning Quote in ${site.town} | ${site.name}`}
+  description={`Tell us what needs cleaning and get a free quote from ${site.name} in ${site.town}.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Free quote', path: '/free-quote/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Get a free quote</h1>
+      <p class="muted measure">A few details are enough. We reply within {site.responseTime}.</p>
+      <QuoteForm />
+    </div>
+  </section>
+</BaseLayout>

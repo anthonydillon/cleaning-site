@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FAQ from '../components/FAQ.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../config/site';
+import { generalFaqs } from '../data/faqs';
+import { faqSchema, compact } from '../lib/schema';
+---
+<BaseLayout
+  title={`Cleaning FAQs | ${site.name}, ${site.town}`}
+  description="Answers on areas, prices, access, insurance, payment and cancellations."
+  schema={compact([faqSchema(generalFaqs)])}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Frequently asked questions</h1>
+      <FAQ faqs={generalFaqs} />
+    </div>
+  </section>
+  <CTA alt />
+</BaseLayout>

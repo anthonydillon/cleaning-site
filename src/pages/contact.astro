@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site, telHref, whatsappHref } from '../config/site';
+---
+<BaseLayout
+  title={`Contact ${site.name} | Cleaners in ${site.town}`}
+  description={`Call, WhatsApp or email ${site.name} about cleaning in ${site.town}.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Contact us</h1>
+      <p class="muted measure">Call, message or send an enquiry.</p>
+      <dl class="contact">
+        <div><dt><Icon name="phone" /> Phone</dt><dd><a href={telHref} data-track="call">{site.phoneDisplay}</a></dd></div>
+        <div><dt><Icon name="whatsapp" /> WhatsApp</dt><dd><a href={whatsappHref()} target="_blank" rel="noopener" data-track="whatsapp">{site.whatsappDisplay}</a></dd></div>
+        <div><dt><Icon name="mail" /> Email</dt><dd><a href={`mailto:${site.email}`} data-track="email">{site.email}</a></dd></div>
+        <div><dt><Icon name="clock" /> Hours</dt><dd>{site.hours}</dd></div>
+        <div><dt><Icon name="pin" /> Areas</dt><dd>{site.town} and {site.areas.slice(1).join(', ')}</dd></div>
+      </dl>
+      <div class="btn-row">
+        <a href="/book/" class="btn btn--primary" data-track="book">Book a clean</a>
+        <a href="/free-quote/" class="btn btn--secondary" data-track="quote">Get a free quote</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact { margin: 0; display: grid; gap: 0; max-width: 560px; }
+  .contact > div { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  dt { font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  dd { margin: 0; color: var(--muted); }
+  dd a { color: var(--ink); font-weight: 600; }
+</style>

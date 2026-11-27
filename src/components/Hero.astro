@@ -1,0 +1,20 @@
+---
+// Split hero: copy on the left, photos on the right (photos first on phones, per the design).
+import Photos from './Photos.astro';
+import type { ImageKey } from '../data/images';
+interface Props { images: ImageKey[] }
+const { images } = Astro.props;
+---
+<section class="hero">
+  <div class="container hero__wrap">
+    <div class="hero__copy"><slot /></div>
+    <div class="hero__media"><Photos keys={images} /></div>
+  </div>
+</section>
+
+<style>
+  .hero { padding: 20px var(--gutter) 36px; }
+  .hero__wrap { display: flex; flex-wrap: wrap-reverse; gap: 32px; align-items: flex-end; }
+  .hero__copy { flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 22px; align-self: flex-start; }
+  .hero__media { flex: 1.5 1 340px; min-width: 0; align-self: flex-start; }
+</style>

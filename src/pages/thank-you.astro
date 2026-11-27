@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site, telHref, whatsappHref } from '../config/site';
+---
+<BaseLayout title={`Thank you | ${site.name}`} description="Thanks for your request. We will be in touch shortly." noindex>
+  <section class="section">
+    <div class="container stack">
+      <h1>Thanks, we will be in touch.</h1>
+      <p class="muted measure" id="ty-msg">We reply within {site.responseTime}.</p>
+      <div class="btn-row">
+        <a href={telHref} class="btn btn--primary" data-track="call">Call us</a>
+        <a href={whatsappHref()} class="btn btn--secondary" target="_blank" rel="noopener" data-track="whatsapp">WhatsApp</a>
+      </div>
+      <a href="/" class="text-link">Back to home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  let type: string | null = null;
+  try { type = sessionStorage.getItem('leadType'); } catch {}
+  const msg = document.getElementById('ty-msg');
+  if (type === 'booking' && msg) msg.textContent = 'Thanks, we will confirm your time shortly.';
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'lead_thank_you', form_type: type ?? 'unknown' });
+</script>

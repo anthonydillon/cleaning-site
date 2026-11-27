@@ -1,0 +1,22 @@
+---
+import Logo from './Logo.astro';
+import { site, telHref } from '../config/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__inner">
+    <Logo size={28} class="footer__logo" />
+    <span>Cleaning in {site.town} and {site.areas.slice(1).join(', ')}</span>
+    <span><a href={telHref} data-track="call">{site.phoneDisplay}</a> · <a href={`mailto:${site.email}`} data-track="email">{site.email}</a></span>
+    <span>{site.hours}</span>
+    <span class="footer__small muted">© {year} {site.name} · <a href="/privacy/">Privacy notice</a></span>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--line); padding: 36px var(--gutter); }
+  .footer__inner { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+  .footer__inner :global(.footer__logo) { margin-bottom: 6px; }
+  .footer a { color: var(--ink); }
+  .footer__small { margin-top: 10px; font-size: 13px; }
+</style>

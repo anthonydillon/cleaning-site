@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import AvailabilityCTA from '../components/AvailabilityCTA.astro';
+import Icon from '../components/Icon.astro';
+import Reviews from '../components/Reviews.astro';
+import FAQ from '../components/FAQ.astro';
+import CTA from '../components/CTA.astro';
+import { images } from '../data/images';
+import { homeFaqs } from '../data/faqs';
+import { site } from '../config/site';
+import { isAmount } from '../lib/price';
+import { faqSchema, compact } from '../lib/schema';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const steps = [
+  { t: 'Tell us what you need', d: 'Pick a service, size and preferred time.' },
+  { t: 'We confirm', d: 'We check availability and agree the price.' },
+  { t: 'We clean', d: 'Your cleaner arrives at the agreed time.' },
+];
+---
+<BaseLayout
+  title={`Cleaners in ${site.town} | Home & Office | ${site.name}`}
+  description={`Home, deep, end of tenancy and office cleaning in ${site.town}. Book online or get a free quote.`}
+  schema={compact([faqSchema(homeFaqs)])}
+>
+  <Hero images={['mopping', 'kitchen', 'office']}>
+    <h1>Home and office cleaning in {site.town}</h1>
+    <p class="muted measure">Regular, deep, end of tenancy and office cleaning. Request a time online or get a free quote.</p>
+    <AvailabilityCTA />
+    <a href="/free-quote/" class="text-link" data-track="quote">Get a free quote</a>
+    <div class="facts">
+      <div><Icon name="home" /><span>Homes</span></div>
+      <div><Icon name="grid" /><span>Offices</span></div>
+      <div><Icon name="calendar" /><span>Online booking</span></div>
+    </div>
+    <ul class="arrow-list">
+      <li>Fully insured</li>
+      <li>Background-checked cleaners</li>
+      <li>Products and equipment supplied</li>
+      <li>Price agreed before we start</li>
+    </ul>
+  </Hero>
+
+  <section class="section">
+    <div class="container stack">
+      <h2>Our cleaning services</h2>
+      <div class="grid grid--cards">
+        {services.map((s) => {
+          const img = images[s.data.images[0]];
+          return (
+            <a href={`/${s.id}/`} class="svc">
+              <Image src={img.src} alt={img.alt} widths={[300, 400, 600, 800]} sizes="(min-width: 1200px) 280px, (min-width: 900px) 30vw, calc(100vw - 40px)" quality={70} class="photo svc__img" style={`object-position:${img.pos}`} loading="lazy" />
+              <span class="svc__body">
+                <strong class="display svc__name">{s.data.name}</strong>
+                <span class="svc__sum muted">{s.data.summary}</span>
+                <span class="svc__price">{isAmount(s.data.price) ? `From £${s.data.price}` : `${s.data.price} for a price`}</span>
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container stack">
+      <h2>How booking works</h2>
+      <ol class="grid grid--steps steps">
+        {steps.map((s, i) => (
+          <li class="card">
+            <span class="muted step-n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.t}</h3>
+            <p class="muted">{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stack">
+      <Reviews limit={2} />
+      <a href="/reviews/" class="text-link">All reviews</a>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container stack">
+      <h2>Areas we cover</h2>
+      <p class="muted measure">{site.areas.join(' · ')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stack">
+      <h2>Common questions</h2>
+      <FAQ faqs={homeFaqs} />
+    </div>
+  </section>
+
+  <CTA />
+</BaseLayout>
+
+<style>
+  .svc { display: flex; flex-direction: column; gap: 10px; text-decoration: none; color: var(--ink); }
+  .svc__img { height: 180px; transition: opacity 0.15s; }
+  .svc:hover .svc__img { opacity: 0.9; }
+  .svc:hover .svc__name { text-decoration: underline; text-underline-offset: 4px; }
+  .svc__body { display: flex; flex-direction: column; }
+  .svc__name { font-size: 18px; }
+  .svc__sum, .svc__price { font-size: 14px; }
+  .svc__price { font-weight: 600; }
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .step-n { font-size: 13px; }
+</style>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+---
+<BaseLayout
+  title={`Privacy Notice | ${site.name}`}
+  description={`How ${site.name} collects, uses and protects your personal information.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Privacy notice', path: '/privacy/' }]}
+>
+  <section class="section">
+    <div class="container stack measure privacy">
+      <h1>Privacy notice</h1>
+      <p><em>TODO: have this reviewed for UK GDPR compliance before launch.</em></p>
+      <p>{site.name} ("we", "us") is committed to protecting your privacy. This policy explains how we use the personal information you give us.</p>
+      <h2>What we collect</h2>
+      <p>When you request a quote or booking, we collect your name, phone number, email address, property address and details about the clean you need.</p>
+      <h2>How we use it</h2>
+      <p>We use your information only to respond to your enquiry, arrange and carry out your clean, and contact you about your booking. We do not sell your data.</p>
+      <h2>How we store it</h2>
+      <p>Form submissions are delivered to us by email through our form provider (Web3Forms). We keep customer records only for as long as necessary to provide our services and meet legal obligations.</p>
+      <h2>Your rights</h2>
+      <p>You can ask to see, correct or delete the personal information we hold about you at any time by emailing <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <h2>Cookies &amp; analytics</h2>
+      <p>We may use analytics cookies to understand how visitors use our website. You can disable cookies in your browser settings.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>.privacy h2 { margin-top: 12px; font-size: 20px; }</style>

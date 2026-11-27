@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingForm from '../components/BookingForm.astro';
+import { site } from '../config/site';
+---
+<BaseLayout
+  title={`Book a Cleaner in ${site.town} | ${site.name}`}
+  description={`Choose your clean, date and time online. We confirm your booking in ${site.town}.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Book', path: '/book/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Book a clean</h1>
+      <p class="muted measure">Choose your service and preferred time. We will confirm before it is booked.</p>
+      <BookingForm />
+    </div>
+  </section>
+</BaseLayout>

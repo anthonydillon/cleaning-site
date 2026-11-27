@@ -1,0 +1,25 @@
+.form { display: flex; flex-direction: column; gap: 16px; max-width: 560px; }
+.form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.form legend.step { letter-spacing: -0.02em; font-weight: 600; font-size: 19px; padding: 0; margin-bottom: 12px; }
+.form legend.sub { font-weight: 600; font-size: 14px; padding: 0; margin-bottom: 6px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-weight: 600; font-size: 14px; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 48px; border: 1px solid var(--input-border); border-radius: 14px;
+  padding: 10px 14px; font: inherit; font-size: 16px; color: var(--ink); background: #fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--ink); outline-offset: 1px; }
+.field input:user-invalid, .field select:user-invalid, .field textarea:user-invalid { border-color: var(--danger); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px;
+  border-radius: 999px; background: var(--chip); font-weight: 600; font-size: 14px; cursor: pointer;
+}
+.chip input { accent-color: var(--ink); width: 16px; height: 16px; margin: 0; }
+.chip:has(input:checked) { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.chip:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
+.form .btn { align-self: stretch; }
+.form-status { margin: 0; padding: 14px; border-radius: 14px; background: #fbeae6; color: var(--danger); font-weight: 600; }
+.form-note { font-size: 13px; color: var(--muted); }
+.form-note a { color: var(--muted); }
+@media (min-width: 600px) { .form .btn { align-self: flex-start; min-width: 240px; } }

@@ -1,0 +1,47 @@
+---
+import '../styles/forms.css';
+import { getCollection } from 'astro:content';
+import FormHidden from './FormHidden.astro';
+import { site } from '../config/site';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+---
+<form class="form" method="POST" action="https://api.web3forms.com/submit" data-lead-form="quote" data-thanks="/thank-you/">
+  <FormHidden subject={`New quote request: ${site.name}`} type="quote" />
+  <div class="field">
+    <label for="q-name">Name</label>
+    <input id="q-name" name="name" type="text" autocomplete="name" required />
+  </div>
+  <div class="field">
+    <label for="q-phone">Phone</label>
+    <input id="q-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required minlength="10" maxlength="20" />
+  </div>
+  <div class="field">
+    <label for="q-email">Email</label>
+    <input id="q-email" name="email" type="email" autocomplete="email" required />
+  </div>
+  <div class="field">
+    <label for="q-type">Type of clean</label>
+    <select id="q-type" name="service" required>
+      {services.map((s) => <option value={s.data.name} data-slug={s.id}>{s.data.name}</option>)}
+      <option value="Not sure">Not sure</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="q-message">Message</label>
+    <textarea id="q-message" name="message" rows="4"></textarea>
+  </div>
+  <p class="form-status" data-form-status role="alert" hidden></p>
+  <button type="submit" class="btn btn--primary" data-track="quote_submit">Send my enquiry</button>
+  <p class="form-note">We use your details only to reply to your enquiry. See our <a href="/privacy/">privacy notice</a>.</p>
+</form>
+
+<script>
+  import { initLeadForms } from '../scripts/lead-forms';
+  initLeadForms();
+  const slug = new URLSearchParams(location.search).get('service');
+  if (slug) {
+    const opt = document.querySelector<HTMLOptionElement>(`#q-type option[data-slug="${CSS.escape(slug)}"]`);
+    if (opt) opt.selected = true;
+  }
+</script>

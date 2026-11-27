@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-demo/
+demo-site/
+.astro/
+.env
+.env.*
+.DS_Store

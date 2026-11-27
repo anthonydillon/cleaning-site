@@ -1,0 +1,15 @@
+---
+interface Props { service?: string; alt?: boolean }
+const { service, alt = false } = Astro.props;
+const book = service ? `/book/?service=${service}` : '/book/';
+---
+<section class:list={['section', { 'section--alt': alt }]}>
+  <div class="container stack">
+    <h2>Ready for a cleaner space?</h2>
+    <p class="muted measure">Book online, or send a few details and we will reply with a price.</p>
+    <div class="btn-row">
+      <a href={book} class="btn btn--primary" data-track="book">Book a clean</a>
+      <a href="/free-quote/" class="btn btn--secondary" data-track="quote">Get a free quote</a>
+    </div>
+  </div>
+</section>

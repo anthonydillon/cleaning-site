@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import AvailabilityCTA from '../components/AvailabilityCTA.astro';
+import Icon from '../components/Icon.astro';
+import Reviews from '../components/Reviews.astro';
+import FAQ from '../components/FAQ.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../config/site';
+import { isAmount } from '../lib/price';
+import { serviceSchema, faqSchema, compact } from '../lib/schema';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((entry) => ({ params: { service: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const factIcons = ['home', 'calendar', 'sparkle'] as const;
+---
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  schema={compact([serviceSchema(Astro.site!, { name: d.name, description: d.description, slug: entry.id, price: d.price }), faqSchema(d.faqs)])}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: d.name, path: `/${entry.id}/` }]}
+>
+  <Hero images={d.images}>
+    <div class="title">
+      <h1>{d.name} in {site.town}</h1>
+      <span class="muted area">{site.town} and [surrounding areas]</span>
+    </div>
+    {isAmount(d.price)
+      ? <div><strong class="display price">£{d.price}</strong> <span class="muted">/ visit, from</span></div>
+      : <div><strong class="display price">{d.price}</strong> <span class="muted">for a price</span></div>}
+    <AvailabilityCTA service={entry.id} />
+    <div class="facts">
+      {d.facts.map((f, i) => <div><Icon name={factIcons[i % 3]} /><span>{f}</span></div>)}
+    </div>
+    <p class="muted measure">{d.summary} Final price depends on size, condition and extras.</p>
+    <h2 class="visually-hidden">What's included</h2>
+    <ul class="arrow-list">{d.checklist.map((c) => <li>{c}</li>)}</ul>
+    <Reviews limit={1} grid={false} />
+  </Hero>
+
+  {d.faqs.length > 0 && (
+    <section class="section section--alt">
+      <div class="container stack">
+        <h2>Questions</h2>
+        <FAQ faqs={d.faqs} />
+      </div>
+    </section>
+  )}
+
+  <CTA service={entry.id} />
+</BaseLayout>
+
+<style>
+  .title { display: flex; flex-direction: column; gap: 6px; }
+  .area { font-size: 13px; }
+  .price { font-size: 24px; }
+</style>

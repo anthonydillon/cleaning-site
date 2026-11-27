@@ -1,0 +1,13 @@
+---
+import { site } from '../config/site';
+interface Props { subject: string; type: string }
+const { subject, type } = Astro.props;
+const redirect = new URL(`/thank-you/?type=${type}`, Astro.site).toString();
+---
+<input type="hidden" name="access_key" value={site.web3formsKey} />
+<input type="hidden" name="subject" value={subject} />
+<input type="hidden" name="from_name" value={`${site.name} website`} />
+<input type="hidden" name="page" value={Astro.url.pathname} />
+<input type="hidden" name="redirect" value={redirect} />
+<!-- Honeypot: bots tick this, humans never see it -->
+<input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />

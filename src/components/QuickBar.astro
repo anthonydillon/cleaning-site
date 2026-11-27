@@ -1,0 +1,27 @@
+---
+// Bottom quick-action bar from the design: on every page, all screen sizes.
+import Icon from './Icon.astro';
+import { telHref, whatsappHref } from '../config/site';
+---
+<nav aria-label="Quick actions" class="qbar">
+  <div class="qbar__inner">
+    <a href="/" data-track="nav_home"><span class="qbar__i"><Icon name="home" /></span>Home</a>
+    <a href="/prices/" data-track="nav_prices"><span class="qbar__i"><Icon name="grid" /></span>Prices</a>
+    <a href="/book/" data-track="book"><span class="qbar__i"><Icon name="calendar" /></span>Book</a>
+    <a href={telHref} data-track="call"><span class="qbar__i qbar__i--dark"><Icon name="phone" /></span>Call</a>
+    <a href={whatsappHref()} target="_blank" rel="noopener" data-track="whatsapp"><span class="qbar__i qbar__i--dark"><Icon name="whatsapp" /></span>WhatsApp</a>
+  </div>
+</nav>
+
+<style>
+  .qbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: #fff; border-top: 1px solid var(--line);
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+  }
+  .qbar__inner { max-width: 520px; margin: 0 auto; display: flex; }
+  .qbar a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: var(--ink); font-size: 12px; font-weight: 600; }
+  .qbar__i { width: 46px; height: 46px; border-radius: 999px; display: grid; place-items: center; background: var(--chip); }
+  .qbar__i--dark { background: var(--ink); color: #fff; }
+  .qbar a:hover .qbar__i:not(.qbar__i--dark) { background: var(--line); }
+</style>

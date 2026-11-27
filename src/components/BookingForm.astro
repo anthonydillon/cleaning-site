@@ -1,0 +1,101 @@
+---
+import '../styles/forms.css';
+import { getCollection } from 'astro:content';
+import FormHidden from './FormHidden.astro';
+import { site } from '../config/site';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const beds = ['Studio', '1', '2', '3', '4', '5+'];
+const baths = ['1', '2', '3', '4+'];
+const times = ['Morning', 'Midday', 'Afternoon'];
+---
+<form class="form" method="POST" action="https://api.web3forms.com/submit" data-lead-form="booking" data-thanks="/thank-you/">
+  <FormHidden subject={`New booking request: ${site.name}`} type="booking" />
+
+  <fieldset>
+    <legend class="step">1. Your clean</legend>
+    <div class="field">
+      <label for="service">Service</label>
+      <select id="service" name="service" required>
+        {services.map((s, i) => <option value={s.data.name} data-slug={s.id} selected={i === 0}>{s.data.name}</option>)}
+      </select>
+    </div>
+    <fieldset>
+      <legend class="sub">Bedrooms</legend>
+      <div class="chips">
+        {beds.map((b, i) => <label class="chip"><input type="radio" name="bedrooms" value={b} checked={i === 0} />{b}</label>)}
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend class="sub">Bathrooms</legend>
+      <div class="chips">
+        {baths.map((b, i) => <label class="chip"><input type="radio" name="bathrooms" value={b} checked={i === 0} />{b}</label>)}
+      </div>
+    </fieldset>
+  </fieldset>
+
+  <fieldset>
+    <legend class="step">2. When</legend>
+    <div class="field">
+      <label for="date">Preferred date</label>
+      <input id="date" name="date" type="date" required />
+    </div>
+    <fieldset>
+      <legend class="sub">Preferred time</legend>
+      <div class="chips">
+        {times.map((t, i) => <label class="chip"><input type="radio" name="time" value={t} checked={i === 0} />{t}</label>)}
+      </div>
+    </fieldset>
+  </fieldset>
+
+  <fieldset>
+    <legend class="step">3. Where and who</legend>
+    <div class="field">
+      <label for="address">Address</label>
+      <input id="address" name="address" type="text" autocomplete="street-address" required />
+    </div>
+    <div class="field">
+      <label for="postcode">Postcode</label>
+      <input id="postcode" name="postcode" type="text" autocomplete="postal-code" autocapitalize="characters" required
+        pattern="[A-Za-z]{1,2}[0-9][A-Za-z0-9]? ?[0-9][A-Za-z]{2}" title="Please enter a UK postcode, e.g. LU1 2AB" />
+    </div>
+    <div class="field">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required minlength="10" maxlength="20" />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label for="notes">Access or other notes (optional)</label>
+      <textarea id="notes" name="notes" rows="3"></textarea>
+    </div>
+  </fieldset>
+
+  <p class="form-status" data-form-status role="alert" hidden></p>
+  <button type="submit" class="btn btn--primary" data-track="booking_submit">Request booking</button>
+  <p class="form-note">We use your details only to arrange your clean. See our <a href="/privacy/">privacy notice</a>.</p>
+</form>
+
+<script>
+  import { initLeadForms } from '../scripts/lead-forms';
+  initLeadForms();
+
+  const date = document.querySelector<HTMLInputElement>('#date');
+  if (date) {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    date.min = t.toISOString().slice(0, 10);
+  }
+  // Preselect from /book/?service=<slug>
+  const slug = new URLSearchParams(location.search).get('service');
+  if (slug) {
+    const opt = document.querySelector<HTMLOptionElement>(`#service option[data-slug="${CSS.escape(slug)}"]`);
+    if (opt) opt.selected = true;
+  }
+</script>

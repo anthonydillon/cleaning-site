@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Reviews from '../components/Reviews.astro';
+import CTA from '../components/CTA.astro';
+import { site } from '../config/site';
+---
+<BaseLayout
+  title={`Cleaning Reviews in ${site.town} | ${site.name}`}
+  description={`Read what customers in ${site.town} say about ${site.name}.`}
+  breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Reviews', path: '/reviews/' }]}
+>
+  <section class="section">
+    <div class="container stack">
+      <h1>Customer reviews</h1>
+      <!-- TODO: only real reviews go here. Link to your Google profile so people can check them. -->
+      <Reviews />
+      {site.googleReviewsUrl
+        ? <a href={site.googleReviewsUrl} class="text-link" target="_blank" rel="noopener">Read our reviews on Google</a>
+        : <span class="text-link">[Link to your Google reviews]</span>}
+    </div>
+  </section>
+  <CTA alt />
+</BaseLayout>
